@@ -47,10 +47,10 @@ export default function Login() {
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-brand-100 mb-4">
-            <span className="text-3xl">👋</span>
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-brand-700 mb-4 text-white">
+            <span className="text-lg font-semibold">L/F</span>
           </div>
-          <h1 className="text-3xl font-extrabold text-surface-900 mb-2">Welcome back</h1>
+          <h1 className="text-3xl font-medium text-surface-900 mb-2">Welcome back</h1>
           <p className="text-surface-700">
             Log in to your Lost & Found account
           </p>

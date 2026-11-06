@@ -4,7 +4,7 @@
    Custom theme — Tailwind CSS v4 style
    ─────────────────────────────────────────── */
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "DM Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
 
   /* Brand palette */
   --color-brand-50:  #eff6f7;
@@ -19,13 +19,17 @@
   --color-brand-900: #163b43;
 
   /* Surface / dark mode base */
-  --color-surface-50:  #f8fafc;
-  --color-surface-100: #f1f5f9;
-  --color-surface-200: #e2e8f0;
-  --color-surface-700: #334155;
-  --color-surface-800: #1e293b;
-  --color-surface-900: #0f172a;
-  --color-surface-950: #020617;
+  --color-surface-50:  #f8f6f1;
+  --color-surface-100: #f1eee7;
+  --color-surface-200: #e3dfd5;
+  --color-surface-300: #c9c4b8;
+  --color-surface-400: #9a958a;
+  --color-surface-500: #716d65;
+  --color-surface-600: #59564f;
+  --color-surface-700: #403e39;
+  --color-surface-800: #2d2c28;
+  --color-surface-900: #1e201d;
+  --color-surface-950: #121311;
 
   /* Status colours (spec §10) */
   --color-status-open:     #3b82f6;
@@ -55,6 +59,8 @@
   body {
     @apply font-sans text-surface-900 bg-surface-50 min-h-screen;
     margin: 0;
+    background-image: linear-gradient(90deg, rgba(30, 32, 29, 0.025) 1px, transparent 1px);
+    background-size: 4px 4px;
   }
 
   /* Focus ring for accessibility */
@@ -67,69 +73,88 @@
    Utility classes used across components
    ─────────────────────────────────────────── */
 @layer components {
-  /* Glass card */
+  /* Modern Glass Card */
   .card {
-    @apply bg-white rounded-2xl border border-surface-200
-           shadow-sm shadow-surface-200/50 p-6 transition-all duration-200;
+    @apply bg-white rounded-xl border border-surface-200
+           shadow-sm shadow-surface-900/5 p-6 transition-all duration-200
+           hover:shadow-md hover:shadow-surface-900/8 hover:border-surface-300;
   }
-  .card:hover {
-    @apply shadow-md shadow-surface-200/70;
+
+  /* Interactive card variant */
+  .card-interactive {
+    @apply cursor-pointer hover:-translate-y-0.5 active:translate-y-0;
   }
 
   /* Primary button */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl
-           bg-brand-600 text-white font-semibold px-6 py-3
-           hover:bg-brand-700 active:bg-brand-800
-           focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2
+    @apply inline-flex items-center justify-center gap-2 rounded-lg
+           bg-brand-700 text-white font-medium px-5 py-2.5 sm:px-6 sm:py-3
+           shadow-sm shadow-brand-900/15
+           hover:bg-brand-800 hover:shadow-md hover:-translate-y-0.5
+           active:translate-y-0 active:scale-[0.98] active:bg-brand-900
+           focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2
            transition-all duration-150 cursor-pointer
-           disabled:opacity-50 disabled:cursor-not-allowed;
+           disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none;
   }
 
   /* Secondary / outline button */
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl
-           border-2 border-brand-600 text-brand-600 font-semibold px-6 py-3
-           hover:bg-brand-50 active:bg-brand-100
+    @apply inline-flex items-center justify-center gap-2 rounded-lg
+           border border-surface-300 bg-white text-surface-800 font-medium px-5 py-2.5 sm:px-6 sm:py-3
+           shadow-sm shadow-surface-900/5
+           hover:bg-surface-50 hover:text-brand-700 hover:border-brand-300 hover:-translate-y-0.5
+           active:translate-y-0 active:scale-[0.98] active:bg-surface-100
            focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2
            transition-all duration-150 cursor-pointer
-           disabled:opacity-50 disabled:cursor-not-allowed;
+           disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0;
   }
 
   /* Danger button */
   .btn-danger {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl
-           bg-status-rejected text-white font-semibold px-6 py-3
-           hover:bg-red-600 active:bg-red-700
+    @apply inline-flex items-center justify-center gap-2 rounded-lg
+           bg-status-rejected text-white font-semibold px-5 py-2.5 sm:px-6 sm:py-3
+           shadow-md shadow-red-500/20
+           hover:bg-red-600 hover:shadow-lg hover:shadow-red-600/30 hover:-translate-y-0.5
+           active:translate-y-0 active:scale-[0.98] active:bg-red-700
            transition-all duration-150 cursor-pointer
-           disabled:opacity-50 disabled:cursor-not-allowed;
+           disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0;
   }
 
   /* Form input */
   .input {
-    @apply w-full rounded-xl border border-surface-200 bg-white px-4 py-3
-           text-surface-900 placeholder:text-surface-700/50
-           focus:border-brand-500 focus:ring-2 focus:ring-brand-200
-           transition-colors duration-150;
+    @apply w-full rounded-lg border border-surface-300 bg-white px-4 py-3
+           text-surface-900 placeholder:text-surface-700/40 text-sm sm:text-base
+           focus:bg-white focus:border-brand-500 focus:ring-2 focus:ring-brand-100
+           hover:border-surface-300
+           transition-all duration-150;
   }
 
   /* Form label */
   .label {
-    @apply block text-sm font-medium text-surface-700 mb-1.5;
+    @apply block text-xs sm:text-sm font-medium text-surface-800 mb-1.5 tracking-tight;
   }
 
   /* Page container */
   .page {
-    @apply max-w-4xl mx-auto px-4 py-8;
+    @apply max-w-5xl mx-auto px-4 sm:px-6 py-10 md:py-12;
   }
 
   /* Section heading */
   .heading {
-    @apply text-2xl md:text-3xl font-bold text-surface-900;
+    @apply text-2xl sm:text-3xl font-medium text-surface-900 tracking-tight;
   }
 
-  /* Subtle gradient background behind hero sections */
+  /* Gradient hero backdrop with radial glow */
   .hero-gradient {
-    background: linear-gradient(135deg, #f8fbfb 0%, #fff 52%, var(--color-brand-50) 100%);
+    background: #f8f6f1;
+  }
+
+  /* Clean scrollbar hide */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }

@@ -146,28 +146,59 @@ export default function Profile() {
       </button>
 
       {/* User header */}
-      <div className="card mb-6">
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-full bg-brand-100 flex items-center justify-center text-2xl font-bold text-brand-600">
-            {user.name.charAt(0).toUpperCase()}
+      <div className="card mb-6 bg-white">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-16 rounded-xl bg-brand-700 flex items-center justify-center text-2xl font-semibold text-white shadow-sm shadow-brand-900/15">
+              {user.name.charAt(0).toUpperCase()}
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h1 className="text-xl sm:text-2xl font-extrabold text-surface-900 tracking-tight">{user.name}</h1>
+                <span className="inline-flex items-center gap-1 text-[11px] font-bold bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full ring-1 ring-emerald-200">
+                  Verified Student
+                </span>
+              </div>
+              <p className="text-sm text-surface-600 mt-0.5">{user.email}</p>
+              {user.phone && (
+                <p className="text-xs text-surface-500 flex items-center gap-1 mt-1">
+                  <span>📞</span> {user.phone}
+                </p>
+              )}
+            </div>
           </div>
-          <div>
-            <h1 className="text-xl font-bold text-surface-900">{user.name}</h1>
-            <p className="text-sm text-surface-700">{user.email}</p>
-            {user.phone && <p className="text-xs text-surface-700/60">{user.phone}</p>}
+
+          <div className="flex items-center gap-3 pt-3 sm:pt-0 border-t sm:border-t-0 border-surface-200/80">
+            <div className="bg-surface-100/80 px-3.5 py-2 rounded-xl text-center">
+              <span className="block text-xs font-semibold text-surface-500">Your Posts</span>
+              <span className="text-base font-bold text-surface-900">{myFoundPosts.length + myLostPosts.length}</span>
+            </div>
+            <div className="bg-surface-100/80 px-3.5 py-2 rounded-xl text-center">
+              <span className="block text-xs font-semibold text-surface-500">Responses</span>
+              <span className="text-base font-bold text-surface-900">{myResponses.length}</span>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Action message */}
+      {/* Action message banner */}
       {actionMsg && (
-        <div className="mb-4 p-3 rounded-xl bg-emerald-50 text-emerald-700 text-sm font-medium ring-1 ring-emerald-200">
-          {actionMsg}
+        <div className="mb-5 p-3.5 rounded-xl bg-emerald-50 text-emerald-800 text-sm font-semibold ring-1 ring-emerald-200 flex items-center justify-between shadow-xs">
+          <span className="flex items-center gap-2">
+            <span>✓</span> {actionMsg}
+          </span>
+          <button
+            type="button"
+            onClick={() => setActionMsg("")}
+            className="text-emerald-700 hover:text-emerald-900 text-xs font-bold"
+          >
+            ✕
+          </button>
         </div>
       )}
 
       {/* Tabs */}
-      <div className="flex gap-1 mb-6 overflow-x-auto pb-1 -mx-4 px-4 scrollbar-hide">
+      <div className="flex gap-2 mb-6 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
         {TABS.map(t => {
           const isActive = tab === t.key;
           let badge = 0;
@@ -179,18 +210,20 @@ export default function Profile() {
             <button
               key={t.key}
               onClick={() => setTab(t.key)}
-              className={`relative flex-shrink-0 px-4 py-2.5 rounded-xl text-sm font-medium transition-all cursor-pointer ${
+              className={`relative flex-shrink-0 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all cursor-pointer ${
                 isActive
-                  ? "bg-brand-600 text-white shadow-md shadow-brand-300/40"
-                  : "text-surface-700 hover:bg-surface-100"
+                  ? "bg-brand-600 text-white shadow-md shadow-brand-700/20 scale-[1.02]"
+                  : "bg-white/80 text-surface-700 hover:bg-surface-100 border border-surface-200/80"
               }`}
               id={`tab-${t.key}`}
             >
-              <span className="mr-1.5">{t.icon}</span>
+              <span>{t.icon}</span>
               <span className="hidden sm:inline">{t.label}</span>
               <span className="sm:hidden">{t.label.split(" ").slice(-1)}</span>
               {badge > 0 && (
-                <span className="absolute -top-1 -right-1 inline-flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-bold bg-amber-400 text-white">
+                <span className={`inline-flex items-center justify-center px-1.5 py-0.5 rounded-full text-[10px] font-black ${
+                  isActive ? "bg-white text-brand-700" : "bg-amber-500 text-white"
+                }`}>
                   {badge}
                 </span>
               )}
@@ -257,13 +290,36 @@ export default function Profile() {
 
                   {/* Contact info (released on accepted) */}
                   {resp.status === "accepted" && (resp.ownerName || resp.responderName) && (
-                    <div className="mt-3 p-3 rounded-lg bg-emerald-50 text-sm ring-1 ring-emerald-200">
-                      <p className="font-semibold text-emerald-700 mb-1">Contact details</p>
-                      <p className="text-emerald-800"><strong>Name:</strong> {resp.ownerName}</p>
-                      <p className="text-emerald-800"><strong>Email:</strong> {resp.ownerEmail}</p>
-                      {resp.ownerPhone && (
-                        <p className="text-emerald-800"><strong>Phone:</strong> {resp.ownerPhone}</p>
-                      )}
+                    <div className="mt-4 p-4 rounded-xl bg-emerald-50/90 text-sm ring-1 ring-emerald-200/90 shadow-xs">
+                      <div className="flex items-center gap-2 mb-2 font-bold text-emerald-800">
+                        <span>Contact Information Exchanged</span>
+                      </div>
+                      <div className="grid sm:grid-cols-2 gap-2 text-surface-800 text-xs sm:text-sm">
+                        <div className="bg-white/80 p-2.5 rounded-lg border border-emerald-200/60">
+                          <span className="text-surface-500 block text-[11px] font-semibold">Name</span>
+                          <span className="font-bold text-surface-900">{resp.ownerName || resp.responderName}</span>
+                        </div>
+                        <div className="bg-white/80 p-2.5 rounded-lg border border-emerald-200/60">
+                          <span className="text-surface-500 block text-[11px] font-semibold">Email</span>
+                          <a
+                            href={`mailto:${resp.ownerEmail || resp.responderEmail}`}
+                            className="font-bold text-brand-600 hover:underline break-all"
+                          >
+                            {resp.ownerEmail || resp.responderEmail}
+                          </a>
+                        </div>
+                        {(resp.ownerPhone || resp.responderPhone) && (
+                          <div className="bg-white/80 p-2.5 rounded-lg border border-emerald-200/60 sm:col-span-2">
+                            <span className="text-surface-500 block text-[11px] font-semibold">Phone</span>
+                            <a
+                              href={`tel:${resp.ownerPhone || resp.responderPhone}`}
+                              className="font-bold text-brand-600 hover:underline"
+                            >
+                              {resp.ownerPhone || resp.responderPhone}
+                            </a>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   )}
                 </div>
@@ -336,25 +392,41 @@ function PostCard({ post, onClosePost, closing }) {
 
   const isOpenOrPending = post.status === "open" || post.status === "pending";
 
+  const isFound = post.type === "found";
+
   return (
-    <div className="card" id={`post-${post.id}`}>
+    <div
+      className={`card border-l-4 transition-all duration-200 ${
+        isFound ? "border-l-emerald-500" : "border-l-amber-500"
+      }`}
+      id={`post-${post.id}`}
+    >
       <div className="flex items-center justify-between flex-wrap gap-2 mb-2">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="font-semibold text-surface-900 capitalize">{post.category}</span>
+          <span className="font-bold text-surface-900 capitalize text-base">{post.category}</span>
+          <span
+            className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold ring-1 ring-inset ${
+              isFound
+                ? "bg-emerald-50 text-emerald-700 ring-emerald-200/80"
+                : "bg-amber-50 text-amber-700 ring-amber-200/80"
+            }`}
+          >
+            {isFound ? "Found Post" : "Lost Request"}
+          </span>
           <StatusBadge status={post.status} />
           {post.hasPhoto && (
             <button
               type="button"
               onClick={handleViewPhoto}
               disabled={photoLoading}
-              className="inline-flex items-center gap-1 text-xs bg-purple-50 text-purple-700 hover:bg-purple-100 px-2.5 py-0.5 rounded-full ring-1 ring-inset ring-purple-200 font-medium transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1 text-xs bg-purple-50 text-purple-700 hover:bg-purple-100 px-2.5 py-0.5 rounded-full ring-1 ring-inset ring-purple-200 font-semibold transition-all cursor-pointer hover:scale-105 active:scale-95"
             >
               {photoLoading ? "Loading…" : "View Photo"}
             </button>
           )}
           {post.pendingCount > 0 && (
-            <span className="text-xs bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full ring-1 ring-inset ring-amber-200 font-semibold">
-              {post.pendingCount} pending
+            <span className="text-xs bg-amber-50 text-amber-700 px-2.5 py-0.5 rounded-full ring-1 ring-inset ring-amber-200 font-bold">
+              {post.pendingCount} pending claim{post.pendingCount > 1 ? "s" : ""}
             </span>
           )}
         </div>
@@ -364,9 +436,9 @@ function PostCard({ post, onClosePost, closing }) {
             type="button"
             onClick={() => onClosePost(post.id)}
             disabled={closing}
-            className="text-xs font-medium text-surface-700 hover:text-surface-900 bg-surface-100 hover:bg-surface-200 px-2.5 py-1 rounded-lg border border-surface-200 transition-colors cursor-pointer"
+            className="text-xs font-bold text-brand-700 hover:text-brand-900 bg-brand-50 hover:bg-brand-100 px-3 py-1.5 rounded-xl border border-brand-200/80 transition-all cursor-pointer shadow-2xs hover:scale-105 active:scale-95"
           >
-            {closing ? "Closing…" : post.type === "found" ? "Mark Returned" : "Mark Resolved"}
+            {closing ? "Closing…" : isFound ? "✓ Mark as Returned" : "✓ Mark as Resolved"}
           </button>
         )}
       </div>
@@ -425,9 +497,11 @@ function PostCard({ post, onClosePost, closing }) {
 
 function EmptyState({ message }) {
   return (
-    <div className="text-center py-12">
-      <span className="mx-auto mb-3 block h-1 w-10 rounded-full bg-brand-300" />
-      <p className="text-surface-700">{message}</p>
+    <div className="card text-center py-14 bg-white border border-dashed border-surface-300">
+      <div className="w-12 h-12 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center text-2xl mx-auto mb-3 shadow-xs">
+        📭
+      </div>
+      <p className="text-surface-700 font-medium text-sm sm:text-base">{message}</p>
     </div>
   );
 }
